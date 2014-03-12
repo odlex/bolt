@@ -162,6 +162,12 @@
 {# --------------- image --------------- #}
 
 {% if field.type == "image" %}
+    {% if field.extensions is defined %}
+        {% set accept_types =  field.extensions %}
+    {% else %}
+        {% set accept_types = config.get('general/accept_image_types') %}
+    {% endif %}
+    
 <div class="dropzone" id="dropzone-{{key}}">
 
     <div class="image-right">
@@ -183,15 +189,15 @@
 
         <input type="text" name="{{key}}" id="field-{{key}}"
             value='{{ content.get(key) }}'
-            class='{% if field.class is defined %}{{ field.class }}{% endif %} imageinput wide'
-            {% if field.extensions is defined %}accept="{{ field.extensions|join('|') }}"{% endif %} >
+            class='{% if field.class is defined %}{{ field.class }}{% endif %} imageinput wide' accept="{{ accept_types|join('|') }}" >
 
 <!-- The fileinput-button span is used to style the file input field as button -->
         <div class="btn-group">
             <span class="btn btn-info fileinput-button">
                 <i class="icon-upload"></i>
                 <span>{{ __('Upload image') }}</span>
-                <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/">
+                <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/"
+                accept="{{ accept_types|join('|') }}" >
             </span>
         </div>
 
@@ -245,7 +251,7 @@
         bindFileUpload('{{key}}');
 
         $("#field-{{key}}").autocomplete({
-            source: "{{ paths.async }}filesautocomplete?ext=gif,jpg,jpeg,png",
+            source: "{{ paths.async }}filesautocomplete?ext={{ accept_types|join(',') }}",
             minLength: 2,
             close: function(){
                 if ($('#field-{{key}}').val() != "" ) {
@@ -269,6 +275,12 @@
 {# --------------- file --------------- #}
 
 {% if field.type == "file" %}
+    {% if field.extensions is defined %}
+        {% set accept_types =  field.extensions %}
+    {% else %}
+        {% set accept_types = config.get('general/accept_file_types') %}
+    {% endif %}
+
 <div class="dropzone" id="dropzone-{{key}}">
 
     <div class="image-container">
@@ -281,15 +293,15 @@
 
         <input type="text" name="{{key}}" id="field-{{key}}"
             value='{{ content.get(key) }}'
-            class='{% if field.class is defined %}{{ field.class }}{% endif %} imageinput'
-            {% if field.extensions is defined %}accept="{{ field.extensions|join('|') }}"{% endif %} ><br>
+            class='{% if field.class is defined %}{{ field.class }}{% endif %} imageinput' accept="{{ accept_types|join('|') }}" ><br>
 
 <!-- The fileinput-button span is used to style the file input field as button -->
         <div class="btn-group">
             <span class="btn btn-info fileinput-button">
                 <i class="icon-upload"></i>
                 <span>{{ __('Upload File') }}</span>
-                <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/" >
+                <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/"
+                accept="{{ accept_types|join('|') }}" >
             </span>
         </div>
 
@@ -323,7 +335,7 @@
                 bindFileUpload('{{key}}');
 
                 $("#field-{{key}}").autocomplete({
-                    source: "{{ paths.async }}filesautocomplete?ext={{ field.extensions|join(',') }}",
+                    source: "{{ paths.async }}filesautocomplete?ext={{ accept_types|join(',') }}",
                     minLength: 2
                 });
 
@@ -339,6 +351,12 @@
 {# --------------- imagelist --------------- #}
 
 {% if field.type == "imagelist" %}
+    {% if field.extensions is defined %}
+        {% set accept_types =  field.extensions %}
+    {% else %}
+        {% set accept_types = config.get('general/accept_image_types') %}
+    {% endif %}
+    
 <label>
     <b>
         {% if field.label %}{{field.label|trans}}{% else %}{{ key|ucfirst|trans}}{%endif%}
@@ -353,7 +371,8 @@
         <span class="btn btn-info fileinput-button" style="margin-bottom: 8px;">
             <i class="icon-upload"></i>
             <span>{{ __('Upload image') }}</span>
-            <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/" {% if field.extensions is defined %}accept="{{ field.extensions|join('|') }}"{% endif %} >
+            <input id="fileupload-{{key}}" type="file" name="fileupload-{{key}}[]" data-url="{{ paths.app }}classes/upload/"
+            accept="{{ accept_types|join('|') }}" >
         </span>
 
         <br clear="all">
@@ -416,6 +435,11 @@
 {# --------------- filelist --------------- #}
 
 {% if field.type == "filelist" %}
+    {% if field.extensions is defined %}
+        {% set accept_types =  field.extensions %}
+    {% else %}
+        {% set accept_types = config.get('general/accept_file_types') %}
+    {% endif %}
 <label>
     <b>
         {% if field.label %}{{field.label|trans}}{% else %}{{ key|ucfirst|trans}}{%endif%}
@@ -439,14 +463,15 @@
                    type="file"
                    name="fileupload-{{key}}[]"
                    data-url="{{ paths.app }}classes/upload/"
-                    {% if field.extensions is defined %}accept="{{ field.extensions|join('|') }}"{% endif %} >
+                   accept="{{ accept_types|join('|') }}" >
         </span>
     </div>
     <textarea name="{{key}}"
               id="{{key}}"
               class="hide">{% if content.get(key) is defined %}{{ content.get(key) }}{% endif %}</textarea>
+    <div class='clearfix'></div>
 </div>
-<div class='clearfix'></div>
+
 
 <script type="text/javascript">
     $(function() {

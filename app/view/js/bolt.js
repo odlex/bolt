@@ -375,15 +375,16 @@ function bindFileUpload(key) {
         })
         .bind('fileuploadsubmit', function (e, data) {
                 var that = this,
-                fileTypes = $('#field-' + key).attr('accept');
-                
+                // fileTypes = $('#field-' + key).attr('accept');
+                fileTypes = $('#fileupload-' + key).attr('accept');
+                // console.log( data.files);
                 if( typeof fileTypes !== 'undefined' ) {
                     var pattern = new RegExp( "(\.|\/)(" + fileTypes + ")$", "gi" );
                     $.each( data.files , function (index, file) {
                         if( !pattern.test(file.type) ) {
                             var message = "Oops! There was an error uploading the file. Make sure that the file type is correct."
                             + "\n\n(accept type was: "
-                            + fileTypes + ")";
+                            + fileTypes.replace(/\|/g, ', ') + ")";
 
                             alert(message);
                             e.preventDefault();
@@ -931,7 +932,7 @@ var FilelistHolder = Backbone.View.extend({
                         if( !pattern.test(file.name) ) {
                             var message = "Oops! There was an error uploading the file. Make sure that the file type is correct."
                                             + "\n\n(accept type was: "
-                                            + fileTypes + ")";
+                                           + fileTypes.replace(/\|/g, ', ') + ")";
                             alert(message);
                             e.preventDefault();
                             return false;
@@ -1081,7 +1082,7 @@ var ImagelistHolder = Backbone.View.extend({
                         if( !pattern.test(file.name) ) {
                             var message = "Oops! There was an error uploading the image. Make sure that the file type is correct."
                                             + "\n\n(accept type was: "
-                                            + fileTypes + ")";
+                                            + fileTypes.replace(/\|/g, ', ') + ")";
                             alert(message);
                             e.preventDefault();
                             return false;
