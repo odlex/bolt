@@ -375,9 +375,7 @@ function bindFileUpload(key) {
         })
         .bind('fileuploadsubmit', function (e, data) {
                 var that = this,
-                // fileTypes = $('#field-' + key).attr('accept');
                 fileTypes = $('#fileupload-' + key).attr('accept');
-                // console.log( data.files);
                 if( typeof fileTypes !== 'undefined' ) {
                     var pattern = new RegExp( "(\.|\/)(" + fileTypes + ")$", "gi" );
                     $.each( data.files , function (index, file) {
